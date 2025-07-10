@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About - Flight Delay Predictor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            animation: backgroundShift 10s ease-in-out infinite alternate;
+        }
+        
+        @keyframes backgroundShift {
+            0% { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%); }
+            100% { background: linear-gradient(135deg, #16213e 0%, #0f0f23 50%, #1a1a2e 100%); }
+        }
+        
+        .container {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: containerFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes containerFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .nav {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .nav a {
+            color: #64748b;
+            text-decoration: none;
+            margin: 0 20px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav a:hover, .nav a.active {
+            color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        h1 {
+            color: #f8fafc;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite alternate;
+        }
+        
+        h2 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        h3 {
+            color: #cbd5e1;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .profile-section, .tech-section, .features-section, .contact-section {
+            background: rgba(51, 65, 85, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .tech-list, .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .tech-list li, .feature-list li {
+            background: rgba(30, 41, 59, 0.5);
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 3px solid #60a5fa;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-list li:hover, .feature-list li:hover {
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .contact-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .contact-links a {
+            color: #60a5fa;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(96, 165, 250, 0.1);
+            border-radius: 25px;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .contact-links a:hover {
+            background: rgba(96, 165, 250, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3);
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav a {
+                margin: 5px;
+                padding: 8px 15px;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="index.html">🏠 Home</a>
+            <a href="#" class="active">ℹ️ About</a>
+        </div>
+        
+        <h1>About Flight Delay Predictor</h1>
+        
+        <div class="profile-section">
+            <h2>🚀 About This Project</h2>
+            <p>The Flight Delay Predictor is an AI-powered web application that helps travelers anticipate potential flight delays before they happen. Using machine learning algorithms and real-time weather data, our system analyzes various factors to provide accurate predictions about flight delays.</p>
+            
+            <p>This project was developed as a comprehensive machine learning solution that combines data science, web development, and cloud deployment technologies to create a practical tool for air travelers.</p>
+        </div>
+        
+        <div class="tech-section">
+            <h2>🛠️ Technologies Used</h2>
+            <ul class="tech-list">
+                <li><strong>🐍 Python</strong> - Core programming language</li>
+                <li><strong>🤖 Scikit-learn</strong> - Machine learning framework</li>
+                <li><strong>🌐 Flask</strong> - Web framework (original version)</li>
+                <li><strong>⚡ Netlify Functions</strong> - Serverless deployment</li>
+                <li><strong>🐼 Pandas & NumPy</strong> - Data manipulation and analysis</li>
+                <li><strong>🌤️ Weather APIs</strong> - Real-time weather integration</li>
+                <li><strong>💾 Pickle</strong> - Model serialization</li>
+                <li><strong>🎨 HTML/CSS/JavaScript</strong> - Frontend interface</li>
+            </ul>
+        </div>
+        
+        <div class="features-section">
+            <h2>✨ Key Features</h2>
+            <ul class="feature-list">
+                <li><strong>🎯 AI-Powered Predictions</strong> - Uses Random Forest algorithm for accurate delay predictions</li>
+                <li><strong>🌍 Real-time Weather Integration</strong> - Incorporates current weather conditions in predictions</li>
+                <li><strong>🏢 Comprehensive Airport Database</strong> - Supports hundreds of airports worldwide</li>
+                <li><strong>📊 Probability Breakdown</strong> - Shows likelihood of different delay categories</li>
+                <li><strong>📱 Responsive Design</strong> - Works seamlessly on desktop and mobile devices</li>
+                <li><strong>⚡ Fast Performance</strong> - Optimized for quick predictions and smooth user experience</li>
+            </ul>
+        </div>
+        
+        <div class="profile-section">
+            <h2>📈 How It Works</h2>
+            <p><strong>1. Data Collection:</strong> The model was trained on historical flight data, including departure times, airports, weather conditions, and actual delay outcomes.</p>
+            
+            <p><strong>2. Feature Engineering:</strong> Key factors like departure hour, origin/destination airports, and weather conditions are processed and encoded for machine learning.</p>
+            
+            <p><strong>3. Model Training:</strong> A Random Forest classifier was trained to predict delay categories: No Delay, Regular Delay (15+ min), Severe Delay (60+ min), and Extreme Delay (180+ min).</p>
+            
+            <p><strong>4. Real-time Prediction:</strong> When you enter flight details, the system fetches current weather data and uses the trained model to predict delay probabilities.</p>
+        </div>
+        
+        <div class="contact-section">
+            <h2>🤝 Connect & Contribute</h2>
+            <p>This project is open source and available on GitHub. Feel free to explore the code, report issues, or contribute improvements!</p>
+            
+            <div class="contact-links">
+                <a href="https://github.com/CassiusFam/predictor_final" target="_blank">
+                    🔗 GitHub Repository
+                </a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">
+                    💼 LinkedIn
+                </a>
+                <a href="mailto:your.email@example.com">
+                    📧 Email
+                </a>
+            </div>
+        </div>
+        
+        <div class="profile-section">
+            <h2>⚠️ Disclaimer</h2>
+            <p>This tool provides predictions based on historical data and current weather conditions. While we strive for accuracy, actual flight delays can be influenced by many factors not captured in our model. Always check with your airline for the most up-to-date flight information.</p>
+            
+            <p>This project is for educational and demonstration purposes. Use the predictions as guidance only and not as the sole basis for travel decisions.</p>
+        </div>
+    </div>
+</body>
+</html>

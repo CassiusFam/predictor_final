@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight Delay Predictor</title>    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            animation: backgroundShift 10s ease-in-out infinite alternate;
+        }
+        
+        @keyframes backgroundShift {
+            0% { background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%); }
+            100% { background: linear-gradient(135deg, #16213e 0%, #0f0f23 50%, #1a1a2e 100%); }
+        }
+        
+        .container {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: containerFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes containerFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .nav {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .nav a {
+            color: #64748b;
+            text-decoration: none;
+            margin: 0 20px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav a:hover, .nav a.active {
+            color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #cbd5e1;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+          select, input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            margin-top: 5px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.5);
+            color: #e2e8f0;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .airport-input {
+            position: relative;
+        }
+        
+        .airport-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+        
+        .airport-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .airport-option:hover {
+            background: rgba(96, 165, 250, 0.1);
+            color: #60a5fa;
+        }
+        
+        .airport-option:last-child {
+            border-bottom: none;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+            min-width: 200px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+        
+        .button:active {
+            transform: translateY(-1px);
+        }
+        
+        .prediction-box, .weather-box {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .probability-bar-container {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 10px;
+            height: 30px;
+            margin: 8px 0 15px 0;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .probability-bar {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.8s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .probability-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .no-delay {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            color: white;
+        }
+        
+        .regular-delay {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+        
+        .severe-delay {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .extreme-delay {
+            background: linear-gradient(135deg, #7c2d12 0%, #451a03 100%);
+            color: white;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #1d4ed8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.3)); }
+            100% { filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.6)); }
+        }
+        
+        h2 {
+            color: #60a5fa;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        h3 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .loading {
+            border: 3px solid rgba(96, 165, 250, 0.3);
+            border-top: 3px solid #60a5fa;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .time-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .time-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav a {
+                margin: 5px;
+                padding: 8px 15px;
+            }
+        }
+        
+        .hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideInDown 0.8s ease-out;
+        }
+        
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1em;
+            margin-top: 10px;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="#" class="active">🏠 Home</a>
+            <a href="about.html">ℹ️ About</a>
+        </div>
+        
+        <div class="hero-section">
+            <h1>✈️ Flight Delay Predictor</h1>
+            <p class="subtitle">Predict flight delays using AI and real-time weather data</p>
+        </div>
+        
+        <form id="predictionForm" onsubmit="event.preventDefault(); predict();">
+            <div class="form-group">
+                <label for="origin">🛫 Origin Airport:</label>
+                <div class="airport-input">
+                    <input type="text" id="origin" placeholder="Type airport name or code..." autocomplete="off" required>
+                    <div id="originOptions" class="airport-dropdown"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="destination">🛬 Destination Airport:</label>
+                <div class="airport-input">
+                    <input type="text" id="destination" placeholder="Type airport name or code..." autocomplete="off" required>
+                    <div id="destinationOptions" class="airport-dropdown"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="hour">🕐 Departure Hour (0-23):</label>
+                <input type="number" id="hour" min="0" max="23" required placeholder="e.g., 14 for 2:00 PM">
+            </div>
+            
+            <button type="submit" class="button">🔮 Predict Delay</button>
+        </form>
+        
+        <div id="results"></div>
+    </div>
+
+    <script src="airports.js"></script>
+    <script>
+
+        function initializeDropdowns() {
+            setupAirportInput('origin', 'originOptions');
+            setupAirportInput('destination', 'destinationOptions');
+        }
+
+        function setupAirportInput(inputId, optionsId) {
+            const input = document.getElementById(inputId);
+            const optionsDiv = document.getElementById(optionsId);
+
+            input.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                if (query.length < 2) {
+                    optionsDiv.style.display = 'none';
+                    return;
+                }
+
+                const matches = airports.filter(airport => 
+                    airport.name.toLowerCase().includes(query) ||
+                    airport.iata.toLowerCase().includes(query)
+                );
+
+                if (matches.length > 0) {
+                    optionsDiv.innerHTML = matches.map(airport => 
+                        `<div class="airport-option" onclick="selectAirport('${inputId}', '${airport.iata}', '${airport.name}')">${airport.name} (${airport.iata})</div>`
+                    ).join('');
+                    optionsDiv.style.display = 'block';
+                } else {
+                    optionsDiv.style.display = 'none';
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                if (this.value.length >= 2) {
+                    optionsDiv.style.display = 'block';
+                }
+            });
+
+            function hideOptions() {
+                setTimeout(() => {
+                    optionsDiv.style.display = 'none';
+                }, 150);
+            }
+
+            input.addEventListener('blur', hideOptions);
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest(`#${inputId}`) && !e.target.closest(`#${optionsId}`)) {
+                    hideOptions();
+                }
+            });
+        }
+
+        function selectAirport(inputId, iata, name) {
+            const input = document.getElementById(inputId);
+            input.value = `${name} (${iata})`;
+            input.setAttribute('data-selected', iata);
+            document.getElementById(inputId === 'origin' ? 'originOptions' : 'destinationOptions').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeDropdowns);
+
+        function predict() {
+            const originInput = document.getElementById('origin');
+            const destinationInput = document.getElementById('destination');
+            const hour = document.getElementById('hour').value;
+            
+            const origin = originInput.getAttribute('data-selected') || 
+                          (originInput.value.match(/\(([A-Z]{3})\)$/) || ['', ''])[1];
+            const destination = destinationInput.getAttribute('data-selected') || 
+                              (destinationInput.value.match(/\(([A-Z]{3})\)$/) || ['', ''])[1];
+            
+            if (!origin || !destination) {
+                alert('Please select both origin and destination airports from the dropdown');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="prediction-box"><h3>✈️ Loading predictions...</h3><div style="text-align: center; padding: 20px;"><div class="loading"></div></div></div>';
+
+            // Create departure time (use current date with selected hour)
+            const now = new Date();
+            const departureTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hour), 0, 0);
+            
+            const requestData = {
+                origin: origin,
+                destination: destination,
+                departure_time: departureTime.toISOString()
+            };
+            
+            fetch('/.netlify/functions/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.error || 'Prediction request failed'); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    resultsDiv.innerHTML = `<div class="prediction-box"><h2>Error:</h2><p>${data.error}</p></div>`;
+                    return;
+                }
+                
+                const predictionRouteHeader = `<h2>Prediction for: ${data.origin_name} (${data.origin_iata}) &rarr; ${data.destination_name} (${data.destination_iata})</h2>`;
+                
+                let resultsHtml = predictionRouteHeader;
+                resultsHtml += '<div class="prediction-box"><h3>Prediction Probabilities:</h3>'; 
+                  
+                data.predictions.forEach(pred => {
+                    const probability = (pred.probability * 100); 
+                    const probabilityDisplay = probability.toFixed(1); 
+                    
+                    let categoryName = pred.category;
+                    let categoryClass = '';
+                    let emoji = '';
+                    
+                    switch(categoryName.toLowerCase()) {
+                        case 'no delay':
+                            categoryClass = 'no-delay';
+                            emoji = '✅';
+                            break;
+                        case 'regular delay':
+                            categoryClass = 'regular-delay';
+                            emoji = '⚠️';
+                            break;
+                        case 'severe delay':
+                            categoryClass = 'severe-delay';
+                            emoji = '🚨';
+                            break;
+                        case 'extreme delay':
+                            categoryClass = 'extreme-delay';
+                            emoji = '🔥';
+                            break;
+                        default:
+                            categoryClass = 'no-delay';
+                            emoji = '❓';
+                    }
+
+                    resultsHtml += `<p><strong>${emoji} ${categoryName}</strong>: ${probabilityDisplay}%</p>`;
+                    resultsHtml += `<div class="probability-bar-container">`;
+                    resultsHtml += `  <div class="probability-bar ${categoryClass}" style="width: ${probability}%;">${probabilityDisplay}%</div>`;
+                    resultsHtml += `</div>`;
+                });
+                resultsHtml += '</div>';
+                  
+                if (data.weather) {
+                    resultsHtml += '<div class="weather-box"><h2>🌤️ Weather Information</h2>';
+                    resultsHtml += `<p><strong>📊 Provider:</strong> ${data.weather_provider || 'N/A'}</p>`;
+                    if (data.used_default_weather) {
+                        resultsHtml += '<p style="color: #fbbf24; font-weight: bold;">⚠️ Default weather data was used.</p>';
+                    }
+                    resultsHtml += `<p><strong>☁️ Conditions:</strong> ${data.weather.condition || 'N/A'}</p>`;
+                    resultsHtml += `<p><strong>📝 Description:</strong> ${data.weather.description || 'N/A'}</p>`;
+                    resultsHtml += `<p><strong>🌡️ Temperature:</strong> ${data.weather.temperature !== undefined ? data.weather.temperature.toFixed(1) + '°C' : 'N/A'}</p>`;
+                    resultsHtml += `<p><strong>💧 Humidity:</strong> ${data.weather.humidity !== undefined ? data.weather.humidity + '%' : 'N/A'}</p>`;
+                    resultsHtml += `<p><strong>👁️ Visibility:</strong> ${data.weather.visibility !== undefined ? data.weather.visibility.toFixed(1) + 'km' : 'N/A'}</p>`;
+                    resultsHtml += `<p><strong>💨 Wind Speed:</strong> ${data.weather.wind_speed !== undefined ? data.weather.wind_speed.toFixed(1) + 'm/s' : 'N/A'}</p>`;
+                    resultsHtml += '</div>';
+                }
+                resultsDiv.innerHTML = resultsHtml;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultsDiv.innerHTML = `<div class="prediction-box"><h2>Error:</h2><p>Could not retrieve prediction. ${error.message}</p></div>`;
+            });
+        }
+    </script>
+</body>
+</html>
