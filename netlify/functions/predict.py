@@ -9,8 +9,8 @@ from datetime import datetime
 import requests
 from cachetools import TTLCache, cached
 
-# Add the project root to Python path to import utils
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+# Add the current directory to Python path to import utils
+sys.path.append(os.path.dirname(__file__))
 
 try:
     from utils.airport import code_to_name, get_all_airport_details, code_to_latlon
@@ -47,8 +47,8 @@ def load_model_and_encoder():
         return _model, _encoder
     
     # Try lightweight models first (for deployment)
-    lite_model_path = os.path.join(os.path.dirname(__file__), '..', '..', 'trained_model_lite.pkl')
-    lite_encoder_path = os.path.join(os.path.dirname(__file__), '..', '..', 'airport_encoder_lite.pkl')
+    lite_model_path = os.path.join(os.path.dirname(__file__), 'trained_model_lite.pkl')
+    lite_encoder_path = os.path.join(os.path.dirname(__file__), 'airport_encoder_lite.pkl')
     
     if os.path.exists(lite_model_path) and os.path.exists(lite_encoder_path):
         with open(lite_model_path, 'rb') as f:
@@ -58,8 +58,8 @@ def load_model_and_encoder():
         return _model, _encoder
     
     # Fallback to full models
-    model_path = os.path.join(os.path.dirname(__file__), '..', '..', 'trained_model.pkl')
-    encoder_path = os.path.join(os.path.dirname(__file__), '..', '..', 'airport_encoder.pkl')
+    model_path = os.path.join(os.path.dirname(__file__), 'trained_model.pkl')
+    encoder_path = os.path.join(os.path.dirname(__file__), 'airport_encoder.pkl')
     
     if os.path.exists(model_path) and os.path.exists(encoder_path):
         with open(model_path, 'rb') as f:

@@ -1,7 +1,6 @@
 [build]
-  command = "cp -r dist/* . && cp trained_model_lite.pkl . && cp airport_encoder_lite.pkl . && cp -r utils . && cp -r data ."
+  publish = "dist"
   functions = "netlify/functions"
-  publish = "."
 
 [functions]
   python_runtime = "3.8"
