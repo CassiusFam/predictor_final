@@ -25,7 +25,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+# dist/  # Commented out for Netlify deployment
 downloads/
 eggs/
 .eggs/
